@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express, { Router, NextFunction, Request, Response } from "express";
 import serverless from "serverless-http";
 import axios from 'axios';
 
@@ -21,6 +21,15 @@ async function getAlbum(id: string): Promise<string[]> {
 
   return extractPhotos(response.data);
 }
+
+api.use((req: Request, res: Response, next: NextFunction) => {
+  const origin = req.headers.origin;
+  if (origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 
 router.get("/hello", (req, res) => res.send("Hello World!"));
