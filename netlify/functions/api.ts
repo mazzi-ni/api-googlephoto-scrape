@@ -24,13 +24,14 @@ async function getAlbum(id: string): Promise<string[]> {
 
 
 router.get("/hello", (req, res) => res.send("Hello World!"));
-router.get('/:id', (req, res) => res.send(req))
-  // try {
-  //   // const results = await getAlbum(req);
-  //   // return res.json(results);
-  // } catch (e) {
-  //   return res.status(500).send();
-  // }
+router.get('/:id', async (req, res) => {
+  try {
+    const results = await getAlbum(req.params.id);
+    res.json(results);
+  } catch (e) {
+    res.status(500).send();
+  }
+})
 
 api.use("/api/", router);
 export const handler = serverless(api);
